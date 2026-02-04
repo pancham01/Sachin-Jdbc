@@ -31,25 +31,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public void saveEmployee(Employee e) throws SQLException {
 
-		Statement statement = connection.createStatement();
-		statement.executeUpdate("insert into employee (empId,name,email,salary) values(" + e.getId() + ",'"
-				+ e.getName() + "','" + e.getEmail() + "'," + e.getSalary() + ")");
-		System.out.println("insert into employee (empId,name,email,salary) values(" + e.getId() + ",'" + e.getName()
-				+ "','" + e.getEmail() + "'," + e.getSalary() + ")");
 	}
 
 	@Override
 	public void updateEmployee(Employee e) {
 
-		try (Statement statement = connection.createStatement()) {
-
-			statement.executeUpdate(String.format(UPDATE_QUERY, e.getName(), e.getEmail(), e.getSalary(), e.getId()));
-
-			System.out.println(String.format(UPDATE_QUERY, e.getName(), e.getEmail(), e.getSalary(), e.getId()));
-
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
 
 	}
 
