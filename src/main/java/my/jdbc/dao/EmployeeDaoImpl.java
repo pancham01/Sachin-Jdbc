@@ -2,6 +2,7 @@ package my.jdbc.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,11 +12,6 @@ import java.util.List;
 import my.jdbc.model.Employee;
 
 public class EmployeeDaoImpl implements EmployeeDao {
-
-	public static final String UPDATE_QUERY = "update employee set name = '%s' , email = '%s', salary = %d where empId = %d";
-	public static final String DELETE_QUERY = "DELETE FROM employee where empId = %d";
-	public static final String SELECT_BY_NAME_QUERY = "SELECT * FROM employee where name = '%s'";
-//	public static final String SELECT_BY_NAME_QUERY = "SELECT * FROM employee where name = 'tddud' or '1 = 1'";
 
 	private static Connection connection = null;
 
@@ -29,63 +25,40 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
-	public void saveEmployee(Employee e) throws SQLException {
+	public void saveEmployeeByPs(Employee e) throws SQLException {
 
+		PreparedStatement ps = connection.prepareStatement("insert into employee (empId,name,email,salary) values(?,?,?,?)");
+		
+		
+		ps.setInt(1, e.getId());
+		ps.setString(2, e.getName());
+		ps.setString(3, e.getEmail());
+		ps.setInt(4, e.getSalary());
+		
+		ps.executeUpdate();
+		
+		System.out.println("insert into employee (empId,name,email,salary) values(?,?,?,?)");
+		
 	}
 
 	@Override
 	public void updateEmployee(Employee e) {
 
-
 	}
 
 	@Override
 	public void deleteAnEmployee(int id) {
-		try (Statement statement = connection.createStatement()) {
-
-			statement.executeUpdate(String.format(DELETE_QUERY, id));
-
-			System.out.println(String.format(DELETE_QUERY, id));
-
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
 	}
 
 	@Override
 	public void printAllEmployee() throws SQLException {
 
-		Statement statement = connection.createStatement();
-
-		ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
-
-		while (resultSet.next()) {
-			System.out.println("Id = " + resultSet.getInt(1) + "\t Name = " + resultSet.getString(2) + "\t Email = "
-					+ resultSet.getString(3) + "\t Salary = " + resultSet.getInt(4));
-
-		}
-
-		System.out.println("SELECT * FROM employee");
 
 	}
 
 	@Override
 	public Employee getEmpById(int id) throws SQLException {
-
-		Statement statement = connection.createStatement();
-
-		ResultSet resultSet = statement.executeQuery("SELECT * FROM employee WHERE empid = " + id);
-		Employee e = new Employee();
-
-		while (resultSet.next()) {
-
-			e.setId(id);
-			e.setName(resultSet.getString(2));
-			e.setEmail(resultSet.getString(3));
-			e.setSalary(resultSet.getInt(4));
-		}
-		System.out.println("SELECT * FROM employee WHERE empid = " + id);
-		return e;
+		return null;
 	}
 
 	@Override
@@ -113,7 +86,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public Employee getEmpByName(String name) throws SQLException {
 		Statement statement = connection.createStatement();
-		ResultSet resultSet = statement.executeQuery(String.format(SELECT_BY_NAME_QUERY, name));
+		ResultSet resultSet = statement.executeQuery(String.format("", name));
 		Employee e = new Employee();
 		while (resultSet.next()) {
 			System.out.println("Id = " + resultSet.getInt(1) + "\t Name = " + resultSet.getString(2) + "\t Email = "
@@ -124,7 +97,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			e.setEmail(resultSet.getString(3));
 			e.setSalary(resultSet.getInt(4));
 		}
-		System.out.println(String.format(SELECT_BY_NAME_QUERY, name));
+		System.out.println(String.format("", name));
 		return e;
 	}
 

@@ -7,7 +7,7 @@ import my.jdbc.model.Employee;
 
 public interface EmployeeDao {
 
-	public void saveEmployee(Employee e)throws SQLException;
+	public void saveEmployeeByPs(Employee e)throws SQLException;
 
 	public void updateEmployee(Employee e);
 
