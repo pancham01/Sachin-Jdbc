@@ -27,18 +27,18 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public void saveEmployeeByPs(Employee e) throws SQLException {
 
-		PreparedStatement ps = connection.prepareStatement("insert into employee (empId,name,email,salary) values(?,?,?,?)");
-		
-		
+		PreparedStatement ps = connection
+				.prepareStatement("insert into employee (empId,name,email,salary) values(?,?,?,?)");
+
 		ps.setInt(1, e.getId());
 		ps.setString(2, e.getName());
 		ps.setString(3, e.getEmail());
 		ps.setInt(4, e.getSalary());
-		
+
 		ps.executeUpdate();
-		
+
 		System.out.println("insert into employee (empId,name,email,salary) values(?,?,?,?)");
-		
+
 	}
 
 	@Override
@@ -52,7 +52,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Override
 	public void printAllEmployee() throws SQLException {
-
 
 	}
 
@@ -99,6 +98,28 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		}
 		System.out.println(String.format("", name));
 		return e;
+	}
+
+	@Override
+	public void insertBatch() throws SQLException {
+
+		connection.setAutoCommit(false);
+		PreparedStatement ps = connection
+				.prepareStatement("insert into employee (empId,name,email,salary) values(?,?,?,?)");
+
+		for (int i = 1; i <= 100; i++) {
+			ps.setInt(1, 10 + i);
+			ps.setString(2, "Pancham " + i);
+			ps.setString(3, "Pancham" + i + "@gmail.com");
+			ps.setInt(4, 50_000);
+			ps.addBatch();
+
+			if (i % 100 == 0) {
+				ps.executeBatch();
+				connection.commit();
+			}
+
+		}
 	}
 
 }

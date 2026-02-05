@@ -20,5 +20,8 @@ public interface EmployeeDao {
 	public List<Employee> getAllEmps()throws SQLException;
 
 	public Employee getEmpByName(String name)throws SQLException;
+	
+	
+	public void insertBatch() throws SQLException ;
 
 }
